@@ -5,33 +5,35 @@ import {
 	Route,
 	Navigate
 } from 'react-router-dom';
-import { AuthRouter } from './AuthRouter';
-import { JournalScreen } from '../components/journal/JournalScreen';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
 import { useDispatch } from 'react-redux';
+
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { AuthRouter } from './AuthRouter';
+// import { PrivateRoute } from './PrivateRoute';
+
+import { JournalScreen } from '../components/journal/JournalScreen';
 import { login } from '../actions/auth'
+// import { PublicRoute } from './PublicRoute';
 
 export const AppRouter = () => {
 
 	const dispatch = useDispatch();
 
-	const [checking, setCheking] = useState(true)
-	const [isLoggedIn, setIsLoggedIn] = useState(false)
+	const [checking, setCheking] = useState(true);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	useEffect(() => {
 		const auth = getAuth();
 		onAuthStateChanged(auth, (user) => {
-			// console.log(user);
 
-			if ( user?.uid ) {
-				dispatch( login(user.uid, user.displayName) )
-				setIsLoggedIn(true)
+			if (user?.uid) {
+				dispatch(login(user.uid, user.displayName));
+				setIsLoggedIn(true);
 			} else {
-				setIsLoggedIn(false)
+				setIsLoggedIn(false);
 			}
-
-			setCheking(false)
-
+			setCheking(false);
 		});
 	}, [dispatch, setCheking, setIsLoggedIn]);
 
@@ -44,13 +46,54 @@ export const AppRouter = () => {
 	return (
 		<Router>
 			<Routes>
-				<Route path="/auth/*" element={<AuthRouter />} />
-				<Route path="/" element={<JournalScreen />} />
+
+				{isLoggedIn ?
+					(<Route
+						path='/'
+						element={<JournalScreen />}
+					/>)
+					:
+					<Route
+						path='/*'
+						element={<Navigate replace to='auth/login' />}
+					/>
+				}
+
+				{isLoggedIn &&
+					<Route
+						path='/auth/*'
+						element={<Navigate replace to='/' />}
+					/>
+				}
 
 				<Route
-					path="*"
-					element={<Navigate replace to="/auth/login" />}
+					path='auth/*'
+					element={<AuthRouter />}
 				/>
+
+				{/* React Router V6 */}
+
+				{/* <Route
+					path="/auth"
+					isAuthenticated={isLoggedIn}
+					element={
+						<PublicRoutes>
+							<AuthRouter />
+						</PublicRoutes>
+					}
+				/>
+
+				<Route
+					exact
+					path="/"
+					isAuthenticated={isLoggedIn}
+					element={
+						<PrivateRoutes>
+							<JournalScreen />
+						</PrivateRoutes>
+					}
+				/> */}
+
 			</Routes>
 		</Router>
 	);

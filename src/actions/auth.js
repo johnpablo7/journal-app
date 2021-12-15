@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 import {
 	getAuth,
 	signInWithPopup,
@@ -20,9 +21,13 @@ export const startLoginEmailPassword = (email, password) => {
 				// console.log(user);
 				dispatch(finishLoading());
 			})
-			.catch(console.error);
-	};
-};
+			.catch(e => {
+				console.log(e);
+				dispatch(finishLoading());
+				Swal.fire('Error', e.message, 'error');
+			})
+	}
+}
 
 export const startRegisterWithEmailPasswordName = (email, password, name) => {
 	return (dispatch) => {
@@ -35,6 +40,7 @@ export const startRegisterWithEmailPasswordName = (email, password, name) => {
 			})
 			.catch((e) => {
 				console.log(e);
+				Swal.fire('Error', e.message, 'error');
 			});
 	};
 };
@@ -54,4 +60,17 @@ export const login = (uid, displayName) => ({
 		uid,
 		displayName
 	}
+});
+
+export const startLogout = () => {
+	return async (dispatch) => {
+		const auth = getAuth();
+		await auth.signOut();
+
+		dispatch(logout());
+	};
+};
+
+export const logout = () => ({
+	type: types.logout
 });
