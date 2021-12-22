@@ -9,6 +9,7 @@ import {
 import { googleAuthProvider } from '../firebase/firebaseConfig';
 import { types } from '../types/types';
 import { finishLoading, startLoading } from './ui';
+import { noteLogout } from './notes';
 
 export const startLoginEmailPassword = (email, password) => {
 	return (dispatch) => {
@@ -21,13 +22,13 @@ export const startLoginEmailPassword = (email, password) => {
 				// console.log(user);
 				dispatch(finishLoading());
 			})
-			.catch(e => {
+			.catch((e) => {
 				console.log(e);
 				dispatch(finishLoading());
 				Swal.fire('Error', e.message, 'error');
-			})
-	}
-}
+			});
+	};
+};
 
 export const startRegisterWithEmailPasswordName = (email, password, name) => {
 	return (dispatch) => {
@@ -68,6 +69,7 @@ export const startLogout = () => {
 		await auth.signOut();
 
 		dispatch(logout());
+		dispatch(noteLogout());
 	};
 };
 
