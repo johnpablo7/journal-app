@@ -1,24 +1,44 @@
 import 'firebase/firestore';
 import 'firebase/auth';
 
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { GoogleAuthProvider } from 'firebase/auth';
 
+// console.log(process.env)
 // Your web app's Firebase configuration
 const firebaseConfig = {
-	apiKey: 'AIzaSyBPkSzrkZ63Bd57fYKCLEQHtduTdoQpW9s',
-	authDomain: 'journal-app-udemy-29bcb.firebaseapp.com',
-	projectId: 'journal-app-udemy-29bcb',
-	storageBucket: 'journal-app-udemy-29bcb.appspot.com',
-	messagingSenderId: '496348985631',
-	appId: '1:496348985631:web:44176d9680d7c47f53582a'
+	apiKey: process.env.REACT_APP_APIKEY,
+	authDomain: process.env.REACT_APP_AUTHDOMAIN,
+	projectId: process.env.REACT_APP_PROJECTID,
+	storageBucket: process.env.REACT_APP_STORAGEBUCKET,
+	messagingSenderId: process.env.REACT_APP_MESSAGINGSENDERID,
+	appId: process.env.REACT_APP_APPID,
 };
+
+// const firebaseConfigTesting = {
+// 	apiKey: "AIzaSyAs2knuC724Cx16GI9YdFx1-h9R_6uZnDI",
+// 	authDomain: "testing-journal-app-d4e1a.firebaseapp.com",
+// 	projectId: "testing-journal-app-d4e1a",
+// 	storageBucket: "testing-journal-app-d4e1a.appspot.com",
+// 	messagingSenderId: "539075301449",
+// 	appId: "1:539075301449:web:f2fcbadbe3b9dfeed36f98"
+// };
+
+// if (process.env.NODE_ENV === 'test') {
+// 	// testing
+// 	initializeApp(firebaseConfigTesting);
+// } else {
+// 	// dev/prod
+// 	initializeApp(firebaseConfig);
+// }
+
+initializeApp(firebaseConfig);
 
 // Initialize Firebase (base datos)
 // const app = initializeApp(firebaseConfig);
-initializeApp(firebaseConfig);
 
 // Referencia a firestore
 const db = getFirestore();

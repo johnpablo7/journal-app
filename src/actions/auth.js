@@ -16,14 +16,14 @@ export const startLoginEmailPassword = (email, password) => {
 		dispatch(startLoading());
 
 		const auth = getAuth();
-		signInWithEmailAndPassword(auth, email, password)
+		return signInWithEmailAndPassword(auth, email, password)
 			.then(async ({ user }) => {
 				dispatch(login(user.uid, user.displayName));
 				// console.log(user);
 				dispatch(finishLoading());
 			})
 			.catch((e) => {
-				console.log(e);
+				// console.log(e);
 				dispatch(finishLoading());
 				Swal.fire('Error', e.message, 'error');
 			});
