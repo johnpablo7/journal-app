@@ -124,6 +124,7 @@ export const startDeleting = (id) => {
 		await deleteDoc(noteRef);
 
 		dispatch(deleteNote(id));
+		Swal.fire('Eliminado!', "Se eliminó la nota", 'success');
 	};
 };
 

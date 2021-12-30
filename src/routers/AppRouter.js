@@ -3,19 +3,18 @@ import {
 	BrowserRouter as Router,
 	Routes,
 	Route,
-	Navigate
 } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
 
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { AuthRouter } from './AuthRouter';
-// import { PrivateRoute } from './PrivateRoute';
+import { PrivateRoute } from './PrivateRoute';
 
 import { JournalScreen } from '../components/journal/JournalScreen';
 import { login } from '../actions/auth'
 import { startLoadingNotes } from '../actions/notes';
-// import { PublicRoute } from './PublicRoute';
+import { PublicRoute } from './PublicRoute';
 
 export const AppRouter = () => {
 
@@ -26,13 +25,11 @@ export const AppRouter = () => {
 
 	useEffect(() => {
 		const auth = getAuth();
-
 		onAuthStateChanged(auth, (user) => {
 
 			if (user?.uid) {
 				dispatch(login(user.uid, user.displayName));
 				setIsLoggedIn(true);
-
 				dispatch(startLoadingNotes(user.uid))
 
 			} else {
@@ -51,53 +48,22 @@ export const AppRouter = () => {
 	return (
 		<Router>
 			<Routes>
-
-				{isLoggedIn ?
-					(<Route
-						path='/'
-						element={<JournalScreen />}
-					/>)
-					:
-					<Route
-						path='/*'
-						element={<Navigate replace to='auth/login' />}
-					/>
-				}
-
-				{isLoggedIn &&
-					<Route
-						path='/auth/*'
-						element={<Navigate replace to='/' />}
-					/>
-				}
-
-				<Route
-					path='auth/*'
-					element={<AuthRouter />}
-				/>
-
 				{/* React Router V6 */}
 
-				{/* <Route
-					path="/auth"
-					isAuthenticated={isLoggedIn}
+				<Route
+					path="/auth/*"
 					element={
-						<PublicRoutes>
-							<AuthRouter />
-						</PublicRoutes>
+						<PublicRoute isAuthenticated={isLoggedIn} element={<AuthRouter />} />
 					}
 				/>
 
 				<Route
 					exact
 					path="/"
-					isAuthenticated={isLoggedIn}
 					element={
-						<PrivateRoutes>
-							<JournalScreen />
-						</PrivateRoutes>
+						<PrivateRoute isAuthenticated={isLoggedIn} element={<JournalScreen />} />
 					}
-				/> */}
+				/>
 
 			</Routes>
 		</Router>

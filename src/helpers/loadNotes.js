@@ -13,7 +13,7 @@ export const loadNotes = async (uid) => {
     })
   });
 
-  console.log(notes)
+  // console.log(notes)
 
   return notes;
 };

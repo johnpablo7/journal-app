@@ -3,7 +3,7 @@ import { types } from "../../types/types"
 
 describe('Pruebas con nuestros tipos', () => {
 
-  test('debe de tener estos tipos ', () => {
+  test('debe de tener estos tipos', () => {
 
     expect(types).toEqual({
       login: '[Auth] Login',
